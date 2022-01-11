@@ -9,23 +9,23 @@ export const listGames = asyncHandler(async (req: Req, res: Res, next: Next) => 
     let params: any = {};
 
     if (page) params.page = page;
+    if (date) params.date = date;
     if (per_page) params.per_page = per_page;
 
     if (typeof team_ids === 'string' && team_ids?.includes(',')) {
         team_ids = team_ids.split(',');
+    }
+    params['team_ids'] = team_ids;
+
+    if (typeof seasons === 'string' && seasons?.includes(',')) {
+        seasons = seasons.split(',');
     }
     params['seasons'] = seasons;
 
     const options: AxiosRequestConfig = {
         method: 'GET',
         url: 'https://free-nba.p.rapidapi.com/games',
-        params: {
-            page,
-            per_page,
-            'seasons[]': seasons,
-            date,
-            'team_ids[]': team_ids
-        },
+        params,
         headers: {
             'x-rapidapi-host': process.env.RAPIDAPI_HOST,
             'x-rapidapi-key': process.env.RAPIDAPI_KEY
